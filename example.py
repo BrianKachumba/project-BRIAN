@@ -1,62 +1,73 @@
-command = ""
 balance = 1000
 balance = int(balance)
 siripin = "1234"
-withdraw = ""
-x_attempt = 3
-attemps = 0
-x_attempt = int(x_attempt)
+attempts = 0  
+# pin validation
 
-while attemps < x_attempt:
-        pin = input("enter pin: ")
-        if pin == siripin:
+# Pin validation loop
+while attempts < 3:
+    pin = input("Enter your pin: ")
+    attempts += 1
     
-            print("""
-            WELCOMES SIR/MADAM
-        HOW WOULD LIKE ME TO HELP YOU:
-                    Withdraw
-                    check balance
-                    deposit cash
-                    exit
+    if pin == siripin:
+        print("""
+        WELCOME SIR/MADAM
+        HOW WOULD YOU LIKE ME TO HELP YOU:
+            - Withdraw
+            - Check balance
+            - Deposit cash
+            - Exit
+        """)
+
+        # Command loop for operations after pin is validated
+        while True:
+            command = input("Enter command please: ").lower()
             
-                """)            
-            while True:
-                command = input("enter command please:")
-                if command == "withdraw":
-                    amount = input("enter amount: ")
-                    amount = int(amount)
+            # Cash withdrawal
+            if command == "withdraw":
+                try:
+                    amount = int(input("Enter amount: "))
                     if amount > balance:
-                        print("Sorry sir! more than you gat")
+                        print("Sorry sir! You do not have enough balance.")
                         print(f"Your balance is {balance}")
                     else:
-
-                            balance = balance - amount
-                            confirmation = input("Are you sure you wanna do this: ").lower()
-                            if confirmation == "yes":
-                                print(f"{amount} successful withdrawn.")
-                            else:
-                                print("Sorry but you must go.!!!")
-                                exit()
-                            
-                elif command == "check balance":
-                    print(f"Your account balance is {balance}")
-                elif command == "deposit cash":
-                    amount = int(input("enter amount: "))
-                    balance = amount + balance
-                    print(f"account balance is {balance}")
-                elif command == "exit":
-                    print("program closed")
-                    break
-                else:
-                    print("sorry sir/madam: command is in valid! enter, help.")
-        else:
-            print("sorry. access dinayed")
+                        confirmation = input(f"Are you sure you want to withdraw {amount}? (yes/no): ").lower()
+                        if confirmation == "yes":
+                            balance -= amount
+                            print(f"{amount} successfully withdrawn.")
+                            print(f"Your account balance is {balance}")
+                        else:
+                            print("Withdrawal cancelled.")
+                
+                except ValueError:
+                    print("Invalid amount. Please enter a valid number.")
             
+            # Check balance
+            elif command == "check balance":
+                print(f"Your account balance is {balance}")
+            
+            # Deposit cash
+            elif command == "deposit cash":
+                try:
+                    amount = int(input("Enter amount to deposit: "))
+                    balance += amount
+                    print(f"Your account balance is {balance}")
+                except ValueError:
+                    print("Invalid amount. Please enter a valid number.")
+            
+            # Exit program
+            elif command == "exit":
+                print("Program closed.")
+                break
+            
+            # Invalid command
+            else:
+                print("Sorry sir/madam, the command is invalid! Please enter a valid command.")
+        
+        break  # Exit after the user successfully logged in
+
+    else:
+        print(f"Sorry. Try again. You have {3 - attempts} remaining chances.")
 
 else:
-    attemps += 1
-    if attemps < x_attempt:
-        pin = input(f"renter pin.{x_attempt - attemps} attemps left")
-    else:
-        print("You sorry ass there is no room for !!!FORGOT PIN!!!")
-        
+    print("Sorry ma'am! Out of chances!!")
